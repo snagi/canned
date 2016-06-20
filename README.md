@@ -131,6 +131,26 @@ If you need to send bind custom HTTP headers to the response you can add them as
 
     //! customHeaders: [{"MyCustomHeaderName": "MyCustomHeaderValue"}, {"SecondHeaderName": "SecondHeaderValue"}]
 
+Using templates instead of json/xml
+------------------
+Supported template engines:
+  - [handlebars](https://www.npmjs.com/package/handlebars): _[reference](http://www.handlebarsjs.com )_
+
+The file extension should be suffixed with extension for template engine. i.e. when created json templates file would have .json+hbs extension and xml templates would have .xml+hbs extension.
+
+    file                                | request
+    /index?name=Superman.get.json+hbs   | GET /?name=Superman&NotAllParams=NeedToMatch
+    /_search?q=hello.get.json+hbs       | GET /comments/search?q=hello
+    /_search.get.json+hbs               | GET /comments/search?iam=soignored
+
+Templates have access to following context variables:
+
+    body    | parsed request body as js object.
+    headers | request headers
+    query   | request query params
+    path    | array representing url path (split using '/')
+
+
 Variable responses
 ------------------
 You can get a different response by specifying request data in variant
@@ -263,8 +283,8 @@ To enable CORS programatically, you can use the following options:
 
     var canned = require('canned')
     ,   http = require('http')
-    ,   opts = { 
-            cors: true, 
+    ,   opts = {
+            cors: true,
             cors_headers: ["Content-Type", "Location"]
         }
 
